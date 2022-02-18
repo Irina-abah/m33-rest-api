@@ -4,8 +4,11 @@ const bcrypt = require('bcryptjs');
 exports.addUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    const newUser = await User.create({ name, email, password })
-    res.status(200).send({user: newUser})
+    const user = await User.create({ name, email, password })
+    res.status(200).send({
+      _id: user._id,
+      name: user.name,
+      email: user.email,})
   } catch (error) {
     console.log(error)
     res.status(500).send({error: error.message})
