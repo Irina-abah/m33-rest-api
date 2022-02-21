@@ -7,10 +7,9 @@ exports.addMovie = async (req, res) => {
       genre,
       director,
       duration,
-      year,
-      owner
+      year
     } = req.body;
-    // const owner = req.user._id;
+    const owner = req.user._id;
     const newMovie = await Movie.create({
       name,
       genre,
@@ -30,6 +29,18 @@ exports.getAllMovies = async (req, res) => {
   try {
     const allMovies = await Movie.find({})
     res.status(200).send({movies: allMovies})
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({error: error.message})
+  }
+}
+
+exports.deleteMovie = async (req, res) => {
+  try {
+    const deteledMovie = await Movie.findByIdAndRemove(req.params.id);
+    if (deteledMovie) {
+      res.status(200).send({ message: "Movie was deleted" })
+    }
   } catch (error) {
     console.log(error)
     res.status(500).send({error: error.message})
