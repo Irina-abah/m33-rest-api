@@ -8,8 +8,9 @@ exports.addMovie = async (req, res) => {
       director,
       duration,
       year,
+      owner
     } = req.body;
-    const owner = req.user._id;
+    // const owner = req.user._id;
     const newMovie = await Movie.create({
       name,
       genre,
