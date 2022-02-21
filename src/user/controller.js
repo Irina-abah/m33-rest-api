@@ -44,3 +44,34 @@ exports.login = async (req, res) => {
     res.status(500).send({error: error.message})
   }
 }
+
+exports.updateUser = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    const userToUpdate = await User.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+    context: 'query',
+  });
+    if (userToUpdate) {
+      res.status(200).send({user: userToUpdate})
+    } else {
+      res.status(500).send({message: "User not found"})
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({error: error.message})
+  }
+}
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const deteledUser = await User.findByIdAndRemove(req.params.id);
+    if (deteledUser) {
+      res.status(200).send({ message: "User was deleted" })
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({error: error.message})
+  }
+}
