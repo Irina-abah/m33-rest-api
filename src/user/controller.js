@@ -1,14 +1,18 @@
 const User = require("./model");
 const bcrypt = require('bcryptjs');
+const jwt = require("jsonwebtoken");
 
 exports.addUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    const user = await User.create({ name, email, password })
+    const user = await User.create(req.body);
+    const token = await jwt.sign({ _id: user._id }, process.env.SECRET);
     res.status(200).send({
       _id: user._id,
       name: user.name,
-      email: user.email,})
+      email: user.email,
+      message: "Successfully created user",
+      token,})
   } catch (error) {
     console.log(error)
     res.status(500).send({error: error.message})
